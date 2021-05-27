@@ -1,0 +1,15 @@
+.theme-dark {
+  --main-container-bg: #{$very-dark-blue};
+  --header-bg: url("../images/bg-desktop-dark.jpg");
+  --toggle-btn-bg: url("../images/icon-sun.svg");
+
+  --input-bg: #{$very-dark-grayish-blue};
+  --input-color: #{$light-grayish-blue};
+  --input-color-focus: #{$very-light-gray};
+  --input-before-border: 2px solid #{$dark-grayish-blue};
+
+  --task-container-bg: #{$very-dark-grayish-blue};
+  --task-row-color: #{$light-grayish-blue};
+  --task-row-border-buttom: 1px solid #{$dark-grayish-blue};
+  --task-completed-text: #{$dark-grayish-blue};
+}

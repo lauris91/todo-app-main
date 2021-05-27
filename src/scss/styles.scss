@@ -1,3 +1,250 @@
+@import "variables";
+@import "theme-light";
+@import "theme-dark";
+
+:root {
+  font-size: 62.5%; /* font-size 1em = 10px on default browser settings */
+}
+
 body {
-  color: red;
+  font-family: $font-family;
+  margin: 0px;
+  min-height: 100vh;
+}
+
+.wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.task-status {
+  position: absolute;
+  border: var(--input-before-border);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  left: 25px;
+}
+
+header {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--header-bg);
+
+  .head-content {
+    width: 40%;
+
+    .main-row {
+      display: flex;
+      justify-content: space-between;
+
+      h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        letter-spacing: 0.4ch;
+      }
+
+      .toggle-btn {
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        background: var(--toggle-btn-bg);
+      }
+    }
+
+    .input {
+      font-family: $font-family;
+      width: 100%;
+      box-sizing: border-box;
+      height: 50px;
+      padding-left: 70px;
+      font-size: 1.8rem;
+      border-radius: 5px;
+      outline: none;
+      border: none;
+      margin-top: 35px;
+      caret-color: $bright-blue;
+      color: var(--input-color);
+      background: var(--input-bg);
+
+      &:focus {
+        color: var(--input-color-focus);
+      }
+    }
+
+    .input-cheat {
+      position: relative;
+
+      &:before {
+        @extend .task-status;
+        content: "";
+        bottom: -5px;
+      }
+    }
+  }
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 300px);
+  background: var(--main-container-bg);
+  position: relative;
+
+  .task-container {
+    width: 40%;
+    border-radius: 5px;
+    background: var(--task-container-bg);
+    margin-top: -45px;
+    height: fit-content;
+    margin-bottom: 60px;
+
+    @media only screen and (max-width: 1100px) {
+      width: 60%;
+    }
+
+    @media only screen and (max-width: 750px) {
+      width: 70%;
+    }
+
+    @media only screen and (max-width: 500px) {
+      width: 90%;
+    }
+
+    .task-row {
+      height: 50px;
+      line-height: 50px;
+      box-sizing: border-box;
+      padding-left: 70px;
+      color: var(--task-row-color);
+      border-bottom: var(--task-row-border-buttom);
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .task-status {
+        &:hover {
+          border-color: $bright-blue;
+          cursor: pointer;
+        }
+
+        &.completed {
+          background: url("../images/icon-check.svg") no-repeat center,
+            $check-background;
+          border: none;
+        }
+      }
+
+      .completed + p {
+        text-decoration: line-through;
+        color: var(--task-completed-text);
+      }
+
+      p {
+        display: inline-block;
+        margin: 0px;
+        cursor: pointer;
+        font-size: 1.6rem;
+      }
+
+      .close {
+        display: none;
+        width: 18px;
+        height: 18px;
+        background: url("../images/icon-cross.svg") no-repeat center;
+        position: absolute;
+        right: 25px;
+        cursor: pointer;
+      }
+
+      &:hover {
+        .close {
+          display: block;
+        }
+      }
+
+      &-empty {
+        justify-content: center;
+        padding-left: 0;
+
+        p {
+          cursor: default;
+        }
+      }
+    }
+
+    .filter-row {
+      color: var(--task-completed-text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 35px;
+      font-size: 1.2rem;
+      box-sizing: border-box;
+      padding: 0 2.5rem;
+      position: relative;
+
+      //   .task-count {
+
+      //   }
+
+      .filter-container {
+        display: flex;
+        justify-content: space-between;
+        width: 30%;
+        height: inherit;
+        align-items: center;
+        position: relative;
+
+        .filter-item {
+          cursor: pointer;
+
+          &.active {
+            color: $bright-blue;
+          }
+
+          &:not(.active):hover {
+            color: var(--task-row-color);
+          }
+        }
+
+        @media only screen and (max-width: 650px) {
+          position: absolute;
+          width: 100%;
+          top: 70px;
+          left: 0;
+          background: var(--task-container-bg);
+          border-radius: 5px;
+          justify-content: center;
+
+          .filter-item {
+            margin: 0 1rem;
+          }
+        }
+      }
+
+      .clear-completed {
+        cursor: pointer;
+
+        &:hover {
+          color: var(--task-row-color);
+        }
+      }
+    }
+  }
+
+  footer {
+    color: var(--task-completed-text);
+    position: absolute;
+    bottom: 20px;
+
+    @media only screen and (max-width: 650px) {
+      margin-top: 120px;
+    }
+  }
 }

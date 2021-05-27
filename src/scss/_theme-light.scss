@@ -1,0 +1,15 @@
+.theme-light {
+  --main-container-bg: #fff;
+  --header-bg: url("../images/bg-desktop-light.jpg");
+  --toggle-btn-bg: url("../images/icon-moon.svg");
+
+  --input-bg: #fff;
+  --input-color: #{$dark-grayish-blue};
+  --input-color-focus: #{$very-dark-grayish-blue};
+  --input-before-border: 2px solid #{$light-grayish-blue};
+
+  --task-container-bg: #fff;
+  --task-row-color: #{$very-dark-grayish-blue};
+  --task-row-border-buttom: 1px solid #{$light-grayish-blue};
+  --task-completed-text: #{$light-grayish-blue};
+}
