@@ -36,6 +36,18 @@ header {
   .head-content {
     width: 40%;
 
+    @media only screen and (max-width: 1100px) {
+      width: 60%;
+    }
+
+    @media only screen and (max-width: 750px) {
+      width: 70%;
+    }
+
+    @media only screen and (max-width: 500px) {
+      width: 90%;
+    }
+
     .main-row {
       display: flex;
       justify-content: space-between;
@@ -103,6 +115,7 @@ header {
     margin-top: -45px;
     height: fit-content;
     margin-bottom: 60px;
+    box-shadow: 0 2px 5px 0 rgba($dark-grayish-blue, 0.2);
 
     @media only screen and (max-width: 1100px) {
       width: 60%;
@@ -126,6 +139,7 @@ header {
       position: relative;
       display: flex;
       align-items: center;
+      background: var(--task-container-bg);
 
       .task-status {
         &:hover {

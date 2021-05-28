@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import update from "immutability-helper";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -7,25 +8,21 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   const [selectedTab, setSelectedTab] = useState("all");
 
-  const [filteredTasks, setFilteredTasks] = useState([]);
+  const filteredTasks = useMemo(() => {
+    if (selectedTab === "all") {
+      return tasks;
+    }
+    if (selectedTab === "active") {
+      return tasks.filter((task) => !task.completed);
+    }
+
+    return tasks.filter((task) => task.completed);
+  }, [tasks, selectedTab]);
 
   const itemsLeft = useMemo(
     () => filteredTasks.filter((x) => !x.completed).length,
     [filteredTasks]
   );
-
-  useEffect(() => {
-    if (selectedTab === "all") {
-      setFilteredTasks(tasks);
-      return;
-    }
-    if (selectedTab === "active") {
-      setFilteredTasks(tasks.filter((task) => !task.completed));
-      return;
-    }
-
-    setFilteredTasks(tasks.filter((task) => task.completed));
-  }, [selectedTab, setFilteredTasks, tasks]);
 
   const addTask = (key) => {
     if (key === "Enter") {
@@ -42,6 +39,15 @@ function App() {
       );
       setInputValue("");
     }
+  };
+
+  const hanldeOnDragEnd = (result) => {
+    if (!result.destination) return;
+    const items = [...tasks];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setTasks(items);
   };
 
   return (
@@ -68,39 +74,66 @@ function App() {
       </header>
       <div className="main-container">
         <div className="task-container">
-          {filteredTasks.length && filteredTasks.length > 0 ? (
-            filteredTasks.map(({ id, task, completed }, index) => (
-              <div className="task-row" key={id} draggable={true}>
-                <div
-                  className={`task-status ${completed ? "completed" : ""}`}
-                  onClick={() => {
-                    setTasks(
-                      update(tasks, {
-                        [index]: {
-                          $set: { ...tasks[index], completed: !completed },
-                        },
-                      })
-                    );
-                  }}
-                ></div>
-                <p>{task}</p>
-                <div
-                  className="close"
-                  onClick={() => {
-                    setTasks(
-                      update(tasks, {
-                        $splice: [[index, 1]],
-                      })
-                    );
-                  }}
-                ></div>
-              </div>
-            ))
-          ) : (
-            <div className="task-row task-row-empty">
-              <p>List is emtpy</p>
-            </div>
-          )}
+          <DragDropContext onDragEnd={hanldeOnDragEnd}>
+            <Droppable droppableId="tasks">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {filteredTasks.length && filteredTasks.length > 0 ? (
+                    filteredTasks.map(({ id, task, completed }, index) => (
+                      <Draggable
+                        key={id}
+                        index={index}
+                        draggableId={id.toString()}
+                      >
+                        {(provided) => (
+                          <div
+                            className="task-row"
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <div
+                              className={`task-status ${
+                                completed ? "completed" : ""
+                              }`}
+                              onClick={() => {
+                                setTasks(
+                                  update(tasks, {
+                                    [index]: {
+                                      $set: {
+                                        ...tasks[index],
+                                        completed: !completed,
+                                      },
+                                    },
+                                  })
+                                );
+                              }}
+                            ></div>
+                            <p>{task}</p>
+                            <div
+                              className="close"
+                              onClick={() => {
+                                setTasks(
+                                  update(tasks, {
+                                    $splice: [[index, 1]],
+                                  })
+                                );
+                              }}
+                            ></div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))
+                  ) : (
+                    <div className="task-row task-row-empty">
+                      <p>List is emtpy</p>
+                    </div>
+                  )}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
           <div className="filter-row">
             <div className="task-count">{itemsLeft} items left</div>
             <div className="filter-container">
